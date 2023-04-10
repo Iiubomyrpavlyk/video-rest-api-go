@@ -81,7 +81,7 @@ func (v *videoStorage) Update(video entity.Video) error {
 	return nil
 }
 
-func (v *videoStorage) GetByChannelId(channelId string) ([]entity.Video, error) {
+func (v *videoStorage) GetAllByChannelId(channelId string) ([]entity.Video, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE channel_Id = '%s'", posgresql.VideosTable, channelId)
 
 	videos := make([]entity.Video, 0)

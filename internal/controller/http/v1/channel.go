@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	channelURL  = "/channels/:id"
-	channelsURL = "/channels"
+	ChannelURL  = "/channels/:id"
+	ChannelsURL = "/channels"
 )
 
 type ChannelUseCase interface {
@@ -19,6 +19,7 @@ type ChannelUseCase interface {
 	GetChannelById(id string) (entity.Channel, error)
 	UpdateChannel(id string, channelDTO dto.UpdateChannelDTO) error
 	DeleteChannel(id string) error
+	GetAllByChannelId(id string) ([]entity.Video, error)
 }
 
 type channelHandler struct {
@@ -35,6 +36,8 @@ func (h *channelHandler) Register(router *gin.RouterGroup) {
 	router.GET("/:id", h.getChannelById)
 	router.DELETE("/:id", h.deleteChannel)
 	router.PUT("/:id", h.updateChannel)
+
+	router.GET("/:id/videos", h.getAllByChannelId)
 }
 
 func (h *channelHandler) createChannel(ctx *gin.Context) {
@@ -125,4 +128,16 @@ func (h *channelHandler) updateChannel(ctx *gin.Context) {
 
 	ctx.Status(http.StatusOK)
 	ctx.Abort()
+}
+
+func (h *channelHandler) getAllByChannelId(ctx *gin.Context) {
+	channelId := ctx.Param("id")
+
+	videos, err := h.channelUseCase.GetAllByChannelId(channelId)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, h2.ResponseError{Message: err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, videos)
 }

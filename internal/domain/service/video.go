@@ -12,7 +12,7 @@ type VideoStorage interface {
 	GetAll(q string, limit, offset int) ([]entity.Video, error)
 	Delete(videoId string) error
 	Update(video entity.Video) error
-	GetByChannelId(channelId string) ([]entity.Video, error)
+	GetAllByChannelId(channelId string) ([]entity.Video, error)
 }
 
 type videoService struct {
@@ -70,6 +70,6 @@ func (s *videoService) UpdateVideo(videoId string, videoDTO dto.UpdateVideoDTO) 
 	})
 }
 
-func (s *videoService) GetByChannelId(channelId string) ([]entity.Video, error) {
-	return s.storage.GetByChannelId(channelId)
+func (s *videoService) GetAllByChannelId(channelId string) ([]entity.Video, error) {
+	return s.storage.GetAllByChannelId(channelId)
 }

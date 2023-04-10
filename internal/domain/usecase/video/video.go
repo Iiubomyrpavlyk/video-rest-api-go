@@ -13,7 +13,7 @@ type Service interface {
 	GetAllVideos(q string, limit, offset int) ([]entity.Video, error)
 	DeleteVideo(videoId string) error
 	UpdateVideo(videoId string, videoDTO dto.UpdateVideoDTO) error
-	GetByChannelId(channelId string) ([]entity.Video, error)
+	GetAllByChannelId(channelId string) ([]entity.Video, error)
 }
 
 type videoUseCase struct {
@@ -50,8 +50,4 @@ func (u videoUseCase) UpdateVideo(id string, videoDTO dto.UpdateVideoDTO) error 
 
 func (u videoUseCase) DeleteVideo(id string) error {
 	return u.videoService.DeleteVideo(id)
-}
-
-func (u videoUseCase) GetByChannelId(id string) ([]entity.Video, error) {
-	return u.videoService.GetByChannelId(id)
 }

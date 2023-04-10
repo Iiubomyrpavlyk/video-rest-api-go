@@ -13,12 +13,17 @@ type Service interface {
 	UpdateChannel(channelId string, channelDTO dto.UpdateChannelDTO) error
 }
 
-type channelUseCase struct {
-	channelService Service
+type VideoService interface {
+	GetAllByChannelId(channelId string) ([]entity.Video, error)
 }
 
-func NewChannelUseCase(channelService Service) *channelUseCase {
-	return &channelUseCase{channelService: channelService}
+type channelUseCase struct {
+	channelService Service
+	videoService   VideoService
+}
+
+func NewChannelUseCase(channelService Service, service VideoService) *channelUseCase {
+	return &channelUseCase{channelService: channelService, videoService: service}
 }
 
 func (u channelUseCase) CreateChannel(dto dto.CreateChannelDTO) (string, error) {
@@ -39,4 +44,8 @@ func (u channelUseCase) UpdateChannel(id string, channelDTO dto.UpdateChannelDTO
 
 func (u channelUseCase) DeleteChannel(id string) error {
 	return u.channelService.DeleteChannel(id)
+}
+
+func (u channelUseCase) GetAllByChannelId(id string) ([]entity.Video, error) {
+	return u.videoService.GetAllByChannelId(id)
 }

@@ -14,7 +14,6 @@ type VideoUseCase interface {
 	GetVideoById(videoId string) (entity.Video, error)
 	DeleteVideo(videoId string) error
 	UpdateVideo(videoId string, dto dto.UpdateVideoDTO) error
-	GetByChannelId(channelId string) ([]entity.Video, error)
 }
 
 type videoHandler struct {
@@ -31,8 +30,6 @@ func (h *videoHandler) Register(router *gin.RouterGroup) {
 	router.GET("/:id", h.getVideoById)
 	router.DELETE("/:id", h.deleteVideo)
 	router.PUT("/:id", h.updateVideo)
-
-	router.GET("/channels/:id", h.getByChannelId)
 }
 
 func (h *videoHandler) createVideo(ctx *gin.Context) {
@@ -123,16 +120,4 @@ func (h *videoHandler) updateVideo(ctx *gin.Context) {
 
 	ctx.Status(http.StatusOK)
 	ctx.Abort()
-}
-
-func (h *videoHandler) getByChannelId(ctx *gin.Context) {
-	channelId := ctx.Param("id")
-
-	channels, err := h.videoUseCase.GetByChannelId(channelId)
-	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, h2.ResponseError{Message: err.Error()})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, channels)
 }

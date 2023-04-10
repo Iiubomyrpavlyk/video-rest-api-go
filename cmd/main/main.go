@@ -48,7 +48,7 @@ func main() {
 	videoStorage := postgres.NewVideoStorage(db)
 	videoService := service.NewVideoService(videoStorage)
 
-	channelUseCase := channel.NewChannelUseCase(channelService)
+	channelUseCase := channel.NewChannelUseCase(channelService, videoService)
 	channelHandler := v1.NewChannelHandler(channelUseCase)
 
 	channelHandler.Register(r.Group("/api/channels"))
