@@ -1,0 +1,8 @@
+port: "8000"
+db:
+    username: "verat"
+    password: "mysecretpassword"
+    host: "localhost"
+    port: "9242"
+    dbname: "videos"
+    sslmode: "disable"
